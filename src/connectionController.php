@@ -22,12 +22,16 @@
 namespace CarloNicora\cryogen;
 
 /**
- * connectionController
- *
+ * Abstract class that provides the common methods for the connection
  *
  */
 abstract class connectionController{
-    /** @var array */
+    /**
+     * An array containing all the connection values needed by every single database plugin.
+     * The composition of the array is defined at a plugin level
+     *
+     * @var array
+     */
     protected $connectionString;
 
     /**
@@ -39,37 +43,47 @@ abstract class connectionController{
     public $connection;
 
     /**
-     * The Cryogen object used from the connection controller
-     *
-     * @var cryogen
-     */
-    protected $cryogen;
-
-    /**
-     * Identifies if there is an active connection to the specific database
-     *
-     * @var bool
-     */
-    public $isConnected;
-
-    /**
-     * Constructs the connection controller
-     *
-     * @param cryogen $cryogen
-     */
-    public function __construct($cryogen){
-        $this->cryogen = $cryogen;
-    }
-
-    /**
      * Stores the connection details in the connection controller and opens the connection to the database
      *
      * @param array $connectionString
      * @return bool
      */
     public abstract function initialize($connectionString);
+
+    /**
+     * Opens a connection to the database
+     *
+     * @return bool
+     */
     public abstract function connect();
+
+    /**
+     * Closes a connection to the database
+     *
+     * @return bool
+     */
     public abstract function disconnect();
+
+    /**
+     * Create a new Database
+     *
+     * @param string $databaseName
+     * @return bool
+     */
     public abstract function createDatabase($databaseName);
+
+    /**
+     * Returns the name of the database specified in the connection
+     *
+     * @return string
+     */
+    public abstract function getDatabaseName();
+
+    /**
+     * Identifies if there is an active connection to the database
+     *
+     * @return bool
+     */
+    public abstract function isConnected();
 }
 ?>

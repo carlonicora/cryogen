@@ -36,6 +36,8 @@ class cryogenException extends Exception {
 
     const FIELD_NOT_SPECIFIED = 3;
 
+    const FAILURE_CREATING_DATABASE_CONNECTION = 4;
+
     /**
      *
      * @param string $cryogenExceptionId the exception id defined by one of the cryogenException constants
@@ -43,7 +45,9 @@ class cryogenException extends Exception {
      */
     public function __construct($cryogenExceptionId, $specification = NULL) {
         parent::__construct($this->generateTextualDescription($cryogenExceptionId) . (isset($specification) ? ' ('.$specification.')' : ''), $cryogenExceptionId);
+    }
 
+    public function log(){
         error_log('Cryogen Exception: '. $this->getCode() . '-' . $this->getMessage());
     }
 
@@ -60,6 +64,7 @@ class cryogenException extends Exception {
             case self::GENERIC_ERROR: $returnValue = ''; break;
             case self::FIELD_NOT_FOUND: $returnValue = 'field not found in meta table'; break;
             case self::FIELD_NOT_SPECIFIED : $returnValue = 'field name not specified while searching a field in a list of fields'; break;
+            case self::FAILURE_CREATING_DATABASE_CONNECTION : $returnValue = 'failure in creating database connection'; break;
             default: $returnValue = 'Generic Error'; break;
         }
 
