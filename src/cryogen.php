@@ -25,109 +25,149 @@ abstract class cryogen{
     /** @var $connectionController connectionController */
 	protected $connectionController;
 
-    /** @var $dataController dataController */
-    protected $dataController;
-
     /** @var  $structureController structureController */
 	protected $structureController;
 
-    private $errorStack;
-	
-	public function createDatabase($databaseName){
+    /**
+     * Create a new Database
+     *
+     * @param string $databaseName
+     * @return bool
+     */
+    public function createDatabase($databaseName){
         if ($this->connectionController){
-            $this->connectionController->createDatabase($databaseName);
-        }
-    }
-
-    public function isConnected(){
-        return($this->connectionController->isConnected());
-    }
-	
-	public function log($message, $sqlStatement, $sqlParameters){
-        $this->errorStack[] = $message;
-
-        $backtrace = debug_backtrace();
-        $pre = "[" . date("d-M-Y H:i:s") . "] ";
-        $post = " in " . $backtrace[0]['file'] . " in line " . $backtrace[0]['line'] . ' WHILE PERFORMING '.$sqlStatement.' WITH PARAMETERS '.json_encode($sqlParameters)."\r\n";
-        error_log($pre . $message . $post);
-	}
-
-    public function getLastLog(){
-        $returnValue = NULL;
-
-        $returnValue = end($this->errorStack);
-
-        return($returnValue);
-    }
-
-    public function clearLastLogs(){
-        $this->errorStack = [];
-
-        return(true);
-    }
-
-    public function read($engine, $level=0, $metaTableCaller=NULL, $metaFieldCaller=NULL){
-		$returnValue = $this->dataController->read($engine, $level, $metaTableCaller, $metaFieldCaller);
-
-		if (sizeof($returnValue) > 0){
-			$returnValue->meta = $engine->meta;
-		} else {
-			$returnValue = NULL;
-		}
-		
-		return($returnValue);
-	}
-
-    public function readSingle($engine, $level=0, $metaTableCaller=NULL, $metaFieldCaller=NULL){
-        $entityList = $this->read($engine, $level, $metaTableCaller, $metaFieldCaller);
-
-        if (isset($entityList) && sizeof($entityList)==1){
-            $returnValue = $entityList[0];
+            $returnValue = $this->connectionController->createDatabase($databaseName);
         } else {
-            $returnValue = null;
+            $returnValue = false;
+            $exception = new cryogenException(cryogenException::CONNECTION_CONTROLLER_NOT_INITIALISED);
+            $exception->log();
         }
 
         return($returnValue);
     }
-	
-	public function count($engine){
-		return($this->dataController->count($engine));
-	}
 
-    public function update($entity, $level = 0, $metaTableCaller=NULL, $metaFieldCaller=NULL){
-		return($this->dataController->update($entity, $level, $metaTableCaller, $metaFieldCaller));
-	}
-	
-	public function delete($entity, $engine = NULL){
-		return($this->dataController->delete($entity, $engine));
-	}
+    /**
+     * Confirms the connection to the database is active
+     *
+     * @return bool
+     */
+    public function isConnected(){
+        if ($this->connectionController){
+            $returnValue = $this->connectionController->isConnected();
+        } else {
+            $returnValue = false;
+            $exception = new cryogenException(cryogenException::CONNECTION_CONTROLLER_NOT_INITIALISED);
+            $exception->log();
+        }
 
-    public function createView($viewSql){
-        return($this->structureController->createView($viewSql));
+        return($returnValue);
     }
 
-    public function createTable($metaTable, $isFederated = FALSE, $federatedLink = NULL){
-        return($this->structureController->createTable($metaTable, $isFederated, $federatedLink));
-    }
+    /**
+     * Generates the query engines used in cryogen
+     *
+     * @param metaTable|null $meta
+     * @param entity|null $entity
+     * @param null $valueOfKeyField
+     * @return mixed
+     */
+    public abstract function generateQueryEngine(metaTable $meta=null, entity $entity=null, $valueOfKeyField=null);
 
-	public function updateTable($metaTable){
-		return($this->structureController->updateTable($metaTable));
-	}
-	
-	public function readStructure(){
-		return($this->structureController->readStructure());
-	}
+    /**
+     * Updates an entity in the database.
+     *
+     * If the entity is not existing in the database, cryogen performs an INSERT, otherwise an UPDATE
+     *
+     * @param entity $entity
+     * @return bool
+     */
+    public abstract function update(entity $entity);
 
-	public function readTableStructure($tableName){
-		return($this->structureController->readTableStructure($tableName));
-	}
-	
-	public function generatePersistencyFiles($metaTables){
-		return($this->structureController->generatePersistencyFiles($metaTables));
-	}
+    /**
+     * Deletes an entity in the database.
+     *
+     * @param entity|null $entity
+     * @param queryEngine|null $engine
+     * @return bool
+     */
+    public abstract function delete(entity $entity=null, queryEngine $engine=null);
 
-    public function setManualSql($sqlStatement, $sqlParameters){
-        $this->dataController->setManualSql($sqlStatement, $sqlParameters);
-    }
+    /**
+     * Reads a list of records identified by the query engine.
+     *
+     * If the levels of relations to load is > 0, then cryogen will load records related to a single foreign key as
+     * defined in the database objects
+     *
+     * @param queryEngine $engine
+     * @param int $levelsOfRelationsToLoad
+     * @param metaTable|null $metaTableCaller
+     * @param metaField|null $metaFieldCaller
+     * @param bool $isSingle
+     * @return entity|entityList|null
+     */
+    public abstract function read(queryEngine $engine, $levelsOfRelationsToLoad=0, metaTable $metaTableCaller=null, metaField $metaFieldCaller=null, $isSingle=false);
+
+    /**
+     * Reads one single record identified by the query engine.
+     *
+     * If the query returns more than one record, the system generates an error. This function is designed to return
+     * a single-record query, not the first of many records.
+     * If the levels of relations to load is > 0, then cryogen will load records related to a single foreign key as
+     * defined in the database objects
+     *
+     * @param queryEngine $engine
+     * @param int $levelsOfRelationsToLoad
+     * @param metaTable|null $metaTableCaller
+     * @param metaField|null $metaFieldCaller
+     * @return entity|null
+     */
+    public abstract function readSingle(queryEngine $engine, $levelsOfRelationsToLoad=0, metaTable $metaTableCaller=null, metaField $metaFieldCaller=null);
+
+    /**
+     * Returns the number of records matching the query in the query engine
+     *
+     * @param queryEngine $engine
+     * @return int
+     */
+    public abstract function count(queryEngine $engine);
+
+    /**
+     * Runs the transactional INSERT, UPDATE or DELETE query on the database
+     *
+     * @param string $sqlStatement
+     * @param array $sqlParameters
+     * @param bool $isDelete
+     * @param bool $generatedId
+     * @return entityList
+     */
+    protected abstract function setActionTransaction($sqlStatement, $sqlParameters, $isDelete=false, &$generatedId=false);
+
+    /**
+     * Commit the INSERT, UPDATE or DELETE transaction on the database
+     *
+     * @param bool $commit
+     * @return bool
+     */
+    protected abstract function completeActionTransaction($commit);
+
+    /**
+     * Runs the transactional SELECT query on the database
+     *
+     * @param queryEngine $engine
+     * @param string $sqlStatement
+     * @param array $sqlParameters
+     * @return entityList
+     */
+    protected abstract function setReadTransaction(queryEngine $engine, $sqlStatement, $sqlParameters);
+
+    /**
+     * Specialised transaction that counts the records matching a specific query engine on the database
+     *
+     * @param queryEngine $engine
+     * @param string $sqlStatement
+     * @param array $sqlParameters
+     * @return int
+     */
+    protected abstract function setCountTransaction(queryEngine $engine, $sqlStatement, $sqlParameters);
 }
 ?>
