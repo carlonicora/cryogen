@@ -21,6 +21,11 @@
  */
 namespace CarloNicora\cryogen;
 
+/**
+ * Class cryogen
+ *
+ * @package CarloNicora\cryogen
+ */
 abstract class cryogen{
     /** @var $connectionController connectionController */
 	protected $connectionController;
