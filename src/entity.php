@@ -135,7 +135,7 @@ class entity{
                 if ($field->type == 'varchar'){
                     $returnValue = (strcmp($this->_initialValues[$name], $this->$name) == 0) ? self::ENTITY_NOT_MODIFIED : self::ENTITY_MODIFIED;
                 } else {
-                    $returnValue = ($this->_initialValues[$name] == $this->$name) ? self::ENTITY_NOT_MODIFIED : self::ENTITY_MODIFIED;
+                    $returnValue = ($this->_initialValues[$name] === $this->$name) ? self::ENTITY_NOT_MODIFIED : self::ENTITY_MODIFIED;
                 }
 
                 if ($returnValue == self::ENTITY_MODIFIED){
@@ -164,7 +164,7 @@ class entity{
                 $name = $field->name;
                 $initialValue = $this->_initialValues[$name];
                 $newValue = $this->$name;
-                if ($initialValue != $newValue){
+                if ($initialValue !== $newValue){
                     $returnValue[$name] = $initialValue;
                 }
             }
