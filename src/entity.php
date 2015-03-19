@@ -21,13 +21,38 @@
  */
 namespace CarloNicora\cryogen;
 
+/**
+ * The entity is the object view of a database record
+ */
 class entity{
+    /**
+     * @var int
+     */
     public $entityStatus;
+
+    /**
+     * @var array
+     */
     protected $_initialValues;
+
+    /**
+     * @var bool
+     */
     public $entityRetrieved;
 
+    /**
+     * @var metaTable
+     */
     public $metaTable;
-    public $isEntityList = FALSE;
+
+    /**
+     * @var bool
+     */
+    public $isEntityList=false;
+
+    const ENTITY_NOT_RETRIEVED = 0;
+    const ENTITY_NOT_MODIFIED = 1;
+    const ENTITY_MODIFIED = 2;
 
     /**
      * @param $entity entity
@@ -60,10 +85,16 @@ class entity{
         }
     }
 
+    /**
+     * Set the flag that the entity has been retrieved from the databse instead of being a brand new record
+     */
     public function setRetrieved(){
-        $this->entityStatus = TRUE;
+        $this->entityStatus = true;
     }
 
+    /**
+     * Duplicates the values read from the database in order to understand if and which field values have changed
+     */
     public function setInitialValues(){
         foreach($this->metaTable->fields as $field){
             $name = $field->name;
@@ -91,18 +122,23 @@ class entity{
         }
     }
 
+    /**
+     * Returns if the record is new, has been read and not modified or has been read and modified
+     *
+     * @return int
+     */
     public function status(){
-        $returnValue = 0;
+        $returnValue = self::ENTITY_NOT_RETRIEVED;
         if ($this->entityStatus){
             foreach ($this->metaTable->fields as $field){
                 $name = $field->name;
                 if ($field->type == 'varchar'){
-                    $returnValue = (strcmp($this->_initialValues[$name], $this->$name) == 0) ? 1 : 2;
+                    $returnValue = (strcmp($this->_initialValues[$name], $this->$name) == 0) ? self::ENTITY_NOT_MODIFIED : self::ENTITY_MODIFIED;
                 } else {
-                    $returnValue = ($this->_initialValues[$name] == $this->$name) ? 1 : 2;
+                    $returnValue = ($this->_initialValues[$name] == $this->$name) ? self::ENTITY_NOT_MODIFIED : self::ENTITY_MODIFIED;
                 }
 
-                if ($returnValue == 2){
+                if ($returnValue == self::ENTITY_MODIFIED){
                     break;
                 }
             }
@@ -111,39 +147,28 @@ class entity{
         return($returnValue);
     }
 
-    public function getModifiedFields(){
-        $returnValue = NULL;
+    /**
+     * Returns the list of modified fields with their original values
+     *
+     * @return array|null
+     */
+    public function getModifiedFieldsInitialValues(){
+        /**
+         * @var metaField $field
+         */
+        $returnValue = null;
 
-        if ($this->status() == 0){
-            foreach ($this->metaTable->fields as $field){
-                $name = $field->name;
-                $returnValue[$name] = $this->$name;
-            }
-        } else {
+        if ($this->status() == entity::ENTITY_MODIFIED){
+            $returnValue = [];
             foreach ($this->metaTable->fields as $field){
                 $name = $field->name;
                 $initialValue = $this->_initialValues[$name];
                 $newValue = $this->$name;
                 if ($initialValue != $newValue){
-                    $returnValue[$name] = $newValue;
+                    $returnValue[$name] = $initialValue;
                 }
             }
         }
-        return($returnValue);
-    }
-
-    public function getRecordIdentifier(){
-        $returnValue = "";
-        foreach ($this->metaTable->fields as $field){
-            if ($field->isPrimaryKey){
-                $name = $field->name;
-                $newValue = $this->$name;
-                $returnValue .= "~" . $newValue;
-            }
-        }
-
-        $returnValue = substr($returnValue, 1);
-
         return($returnValue);
     }
 }

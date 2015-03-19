@@ -21,7 +21,12 @@
  */
 namespace CarloNicora\cryogen;
 
-class metaFields extends \ArrayObject{
+use ArrayObject;
+
+/**
+ * The metaFields objects extends the functionality of an array, adding features used by list of fields
+ */
+class metaFields extends ArrayObject{
     /**
      * @param string $fieldName
      * @param string|null $tableName

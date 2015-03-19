@@ -21,19 +21,61 @@
  */
 namespace CarloNicora\cryogen;
 
+/**
+ * The discriminant class identifies a meta field used in the WHERE clause
+ */
 class discriminant{
+    /**
+     * @var metaField
+     */
     public $metaField;
+
+    /**
+     * @var mixed
+     */
     public $value;
+
+    /**
+     * @var string
+     */
     public $clause;
+
+    /**
+     * @var string
+     */
     public $connector;
+
+    /**
+     * @var string
+     */
     public $separator;
 
+    /**
+     * @var bool
+     */
+    public $isChanged;
+
+    /**
+     * @var mixed
+     */
+    public $originalValue;
+
+    /**
+     * Initialises the discriminant, setting the meta field and the value
+     *
+     * @param metaField $metaField
+     * @param mixed $value
+     * @param string $clause
+     * @param string $connector
+     * @param string $separator
+     */
     public function __construct(metaField $metaField, $value, $clause="=", $connector=" AND ", $separator = ""){
         $this->metaField = $metaField;
         $this->value = $value;
         $this->clause = $clause;
         $this->connector = $connector;
         $this->separator = $separator;
+        $this->isChanged = false;
     }
 }
 ?>

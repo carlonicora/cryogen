@@ -31,12 +31,15 @@ use Exception;
 class cryogenException extends Exception {
     /** @const int GENERIC_ERROR Indicates a generic cryogen error */
     const GENERIC_ERROR = 1;
-
     const FIELD_NOT_FOUND = 2;
-
     const FIELD_NOT_SPECIFIED = 3;
-
     const FAILURE_CREATING_DATABASE_CONNECTION = 4;
+    const EMPTY_DELETE_PARAMETERS = 5;
+    const CONNECTION_CONTROLLER_NOT_INITIALISED=6;
+    const ERROR_PREPARING_SQL_STATEMENT=7;
+    const ERROR_BINDING_OBJECT_TO_TABLE_PARAMETERS=8;
+    const ERROR_COMMITTING_QUERY = 9;
+    const ERROR_RUNNING_UPDATE_QUERY = 10;
 
     /**
      *
@@ -65,6 +68,13 @@ class cryogenException extends Exception {
             case self::FIELD_NOT_FOUND: $returnValue = 'field not found in meta table'; break;
             case self::FIELD_NOT_SPECIFIED : $returnValue = 'field name not specified while searching a field in a list of fields'; break;
             case self::FAILURE_CREATING_DATABASE_CONNECTION : $returnValue = 'failure in creating database connection'; break;
+            case self::EMPTY_DELETE_PARAMETERS : $returnValue = 'at least one of the parameters for a deletion should be set'; break;
+            case self::CONNECTION_CONTROLLER_NOT_INITIALISED : $returnValue = 'connection controller not initialised'; break;
+            case self::ERROR_PREPARING_SQL_STATEMENT : $returnValue = 'error preparing the sql statment'; break;
+            case self::ERROR_BINDING_OBJECT_TO_TABLE_PARAMETERS : $returnValue = 'error binding the database object parameters to the database table (is your DB table aligned to your DB object?)'; break;
+            case self::ERROR_COMMITTING_QUERY : $returnValue = 'error committing the SQL to the database'; break;
+            case self::ERROR_RUNNING_UPDATE_QUERY : $returnValue = 'error running the INSERT-UPDATE-DELETE query on the database'; break;
+
             default: $returnValue = 'Generic Error'; break;
         }
 

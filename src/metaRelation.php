@@ -21,14 +21,51 @@
  */
 namespace CarloNicora\cryogen;
 
+/**
+ * The metaRelation class identifies a relation between two tables managing primary key and foreign key in two tables
+ * in order to link them together
+ */
 class metaRelation{
+    /**
+     * @var string
+     */
     public $target;
+
+    /**
+     * @var string
+     */
     public $field;
+
+    /**
+     * @var string
+     */
     public $table;
+
+    /**
+     * @var string
+     */
     public $linkedField;
+
+    /**
+     * @var string
+     */
     public $linkedTable;
+
+    /**
+     * @var string
+     */
     public $relationType;
 
+    /**
+     * Initialises the relation
+     *
+     * @param string $target
+     * @param string $field
+     * @param string $table
+     * @param string $linkedField
+     * @param string $linkedTable
+     * @param string $relationType
+     */
     public function __construct($target, $field, $table, $linkedField, $linkedTable, $relationType){
         $this->target = $target;
         $this->field = $field;

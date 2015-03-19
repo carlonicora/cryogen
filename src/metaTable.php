@@ -21,27 +21,55 @@
  */
 namespace CarloNicora\cryogen;
 
+/**
+ * The meta table is the object view of a db table
+ */
 class metaTable{
-
+    /**
+     * @var string
+     */
     public $name;
+
+    /**
+     * @var string
+     */
     public $object;
+
+    /**
+     * @var metaFields
+     */
     public $fields;
+
+    /**
+     * @var array
+     */
     public $relations;
 
-    public function __construct($name, $object){
+    /**
+     * Initialises the meta table with the name of the table in the database and the fully qualified name of the object
+     *
+     * @param string $name
+     * @param $object
+     */
+    public function __construct($name, $object) {
         $this->name = $name;
         $this->object = $object;
-        //$this->fields = [];
         $this->fields = new metaFields();
         $this->relations = [];
     }
 
-    public function getKeyFields()
-    {
-        $returnValue = [];
+    /**
+     * Returns the fields that compose the primary key of a table
+     *
+     * @return metaFields
+     */
+    public function getKeyFields() {
+        /**
+         * @var $field metaField
+         */
+        $returnValue = new metaFields();
 
         foreach ($this->fields as $field) {
-            /** @var $field metaField */
             if ($field->isPrimaryKey) {
                 $returnValue[] = $field;
             }

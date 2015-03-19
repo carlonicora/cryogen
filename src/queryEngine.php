@@ -108,6 +108,8 @@ abstract class queryEngine{
             $this->meta = $meta;
         } else if (isset($entity)){
             $this->meta = $entity->metaTable;
+
+            $updatedFields = $entity->getModifiedFieldsInitialValues();
         }
 
         foreach($this->meta->fields as $field){
@@ -115,6 +117,11 @@ abstract class queryEngine{
             $discriminant = new discriminant($field, NULL);
             if ($entity){
                 $discriminant->value = $entity->$name;
+
+                if (isset($updatedFields) && isset($updatedFields[$field->name])){
+                    $discriminant->isChanged = true;
+                    $discriminant->originalValue = $updatedFields[$field->name];
+                }
             }
             if ($field->isPrimaryKey){
                 $this->keyFields[] = $discriminant;

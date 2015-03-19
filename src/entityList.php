@@ -21,40 +21,42 @@
  */
 namespace CarloNicora\cryogen;
 
-class entityList extends \ArrayObject{
-    public $isEntityList = TRUE;
+use ArrayObject;
 
-    /** @var $meta metaTable */
+/**
+ * The entity list is the object view of a recordset. It extends the functionality of an array, adding features
+ * used by a recordset
+ */
+class entityList extends ArrayObject{
+    /**
+     * @var bool
+     */
+    public $isEntityList = true;
+
+    /**
+     * @var metaTable
+     */
     public $meta;
 
-    public function __construct($metaTable=NULL){
+    /**
+     * Initialises the entity list, setting the meta table if available
+     *
+     * @param metaTable|null $metaTable
+     */
+    public function __construct(metaTable $metaTable=null){
         if (isset($metaTable)){
             $this->meta = $metaTable;
         }
     }
 
-    public function getEntityByField($field, $value){
-        $returnValue = NULL;
-
-        if (!$this->meta){
-            if ($this[0]){
-                $this->meta = $this[0]->metaTable;
-            }
-        }
-
-        $fieldName = $field->name;
-        foreach ($this as $entity){
-            if ($entity->$fieldName == $value){
-                $returnValue = $entity;
-                break;
-            }
-        }
-
-        return($returnValue);
-    }
-
+    /**
+     * Returns a list of entities matching the required field/values
+     *
+     * @param array $fields
+     * @return array|null
+     */
     public function getEntityByFields($fields){
-        $returnValue = NULL;
+        $returnValue = [];
 
         if (!$this->meta){
             if ($this[0]){
@@ -63,19 +65,23 @@ class entityList extends \ArrayObject{
         }
 
         foreach ($this as $entity){
-            $returnValue = $entity;
+            $returnableEntity = $entity;
 
             foreach ($fields as $field){
-                //$fieldName = $field[0]->name;
                 $fieldName = $field[0]->name;
-                //if ($entity->$fieldName != $field[1]){
                 if ($entity->$fieldName != $field[1]){
-                    $returnValue = null;
+                    $returnableEntity = null;
                     break;
                 }
             }
 
-            if (isset($returnValue)) break;
+            if (isset($returnableEntity)){
+                $returnValue[] = $returnableEntity;
+            }
+        }
+
+        if (sizeof($returnValue) == 0){
+            $returnValue = null;
         }
 
         return($returnValue);

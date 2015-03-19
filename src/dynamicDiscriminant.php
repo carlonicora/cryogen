@@ -21,10 +21,27 @@
  */
 namespace CarloNicora\cryogen;
 
+/**
+ * The Dynamic discriminant is a discriminant based on a virtual field. A virtual field is a field that is generated
+ * by a query, but that is not a real field in the table
+ */
 class dynamicDiscriminant extends discriminant{
+    /**
+     * @var string
+     */
     public $fieldName;
 
-    public function __construct($fieldName, $type, $value, $clause="=", $connector=" AND ", $separator = ""){
+    /**
+     * Initialises the discriminant for the virtual field with its value
+     *
+     * @param string $fieldName
+     * @param string $type
+     * @param mixed $value
+     * @param string $clause
+     * @param string $connector
+     * @param string $separator
+     */
+    public function __construct($fieldName, $type, $value, $clause="=", $connector=" AND ", $separator=""){
         $this->fieldName = $fieldName;
         parent::__construct(null, $type, $value, $clause, $connector, $separator);
     }

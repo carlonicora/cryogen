@@ -21,6 +21,9 @@
  */
 namespace CarloNicora\cryogen;
 
+/**
+ * The meta field is the object view of a db field
+ */
 class metaField{
     public $position;
     public $name;
@@ -29,6 +32,16 @@ class metaField{
     public $isPrimaryKey;
     public $isAutoNumbering;
 
+    /**
+     * Initialises the meta field passing the database field options
+     *
+     * @param int $position
+     * @param string $fieldName
+     * @param string $fieldType
+     * @param mixed $fieldSize
+     * @param bool $isPrimaryKey
+     * @param bool $isAutoNumbering
+     */
     public function __construct($position, $fieldName, $fieldType, $fieldSize, $isPrimaryKey, $isAutoNumbering){
         $this->position = $position;
         $this->name = $fieldName;
