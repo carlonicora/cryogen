@@ -83,10 +83,10 @@ abstract class cryogen{
      *
      * If the entity is not existing in the database, cryogen performs an INSERT, otherwise an UPDATE
      *
-     * @param entity $entity
+     * @param entity|entityList $entity
      * @return bool
      */
-    public abstract function update(entity $entity);
+    public abstract function update($entity);
 
     /**
      * Deletes an entity in the database.
@@ -174,5 +174,56 @@ abstract class cryogen{
      * @return int
      */
     protected abstract function setCountTransaction(queryEngine $engine, $sqlStatement, $sqlParameters);
+
+    /**
+     * Returns the structure of all the tables in the connected database
+     *
+     * @return array
+     */
+    public function readStructure(){
+        return($this->structureController->readStructure());
+    }
+
+    /**
+     * Read the structure of a table from the database and returns the metaTable object
+     *
+     * @param $tableName
+     * @return metaTable
+     */
+    public function readTableStructure($tableName){
+        return($this->structureController->readTableStructure($tableName));
+    }
+
+    /**
+     * Creates a view based on the specified sql code
+     *
+     * @param $viewSql
+     * @return bool
+     */
+    public function createView($viewSql){
+        return($this->structureController->createView($viewSql));
+    }
+
+    /**
+     * Creates a table on the database using the meta table passed as parameter
+     *
+     * @param metaTable $metaTable
+     * @param bool $isFederated
+     * @param string $federatedLink
+     * @return bool
+     */
+    public function createTable(metaTable $metaTable, $isFederated=false, $federatedLink=null){
+        return($this->structureController->createTable($metaTable, $isFederated, $federatedLink));
+    }
+
+    /**
+     * Updates a table on the database using the meta table passed as parameter
+     *
+     * @param metaTable $metaTable
+     * @return bool
+     */
+    public function updateTable(metaTable $metaTable){
+        return($this->structureController->updateTable(($metaTable)));
+    }
 }
 ?>
