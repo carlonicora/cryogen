@@ -1,11 +1,11 @@
 {
-    "name": "CarloNicora/cryogen",
+    "name": "carlo-nicora/cryogen",
     "description": "Cryogen is a PHP object-oriented database persistency layer",
     "type": "library",
     "keywords": ["cryogen", "php", "database", "persistency layer", "persistency"],
     "homepage": "http://carlonicora.com",
     "time": "2015-03-16",
-    "license": "Apache License 2.0",
+    "license": "Apache-2.0",
     "authors": [
         {
             "name": "Carlo Nicora",
