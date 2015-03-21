@@ -120,7 +120,7 @@ abstract class structureController{
             }
         }
 
-        $returnValue .= "	public function __construct(\$entity=null" . $additionalParams . "){\r\n";
+        $returnValue .= "	public function __construct(entity \$entity=null" . $additionalParams . "){\r\n";
         $returnValue .= "		\$this->metaTable = self::\$table;\r\n";
         $returnValue .= "		\$this->_initialValues = [];\r\n";
         $returnValue .= "		\r\n";
