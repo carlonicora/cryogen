@@ -91,11 +91,11 @@ abstract class cryogen{
     /**
      * Deletes an entity in the database.
      *
-     * @param entity|null $entity
+     * @param entity|entityList|null $entity
      * @param queryEngine|null $engine
      * @return bool
      */
-    public abstract function delete(entity $entity=null, queryEngine $engine=null);
+    public abstract function delete($entity=null, queryEngine $engine=null);
 
     /**
      * Reads a list of records identified by the query engine.
