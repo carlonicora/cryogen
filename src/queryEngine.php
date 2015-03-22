@@ -118,7 +118,7 @@ abstract class queryEngine{
             if ($entity){
                 $discriminant->value = $entity->$name;
 
-                if (isset($updatedFields) && isset($updatedFields[$field->name])){
+                if (isset($updatedFields) && array_key_exists($field->name, $updatedFields)){
                     $discriminant->isChanged = true;
                     $discriminant->originalValue = $updatedFields[$field->name];
                 }
