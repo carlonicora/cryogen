@@ -27,14 +27,6 @@ namespace CarloNicora\cryogen;
  */
 abstract class connectionController{
     /**
-     * An array containing all the connection values needed by every single database plugin.
-     * The composition of the array is defined at a plugin level
-     *
-     * @var array
-     */
-    protected $connectionString;
-
-    /**
      * The object that extends connectionController and provides connectivity to the specific
      * database type of a specific plugin
      *
@@ -43,12 +35,23 @@ abstract class connectionController{
     public $connection;
 
     /**
+     * @var connectionBuilder
+     */
+    public $connectionValues;
+
+    /**
      * Stores the connection details in the connection controller and opens the connection to the database
      *
-     * @param array $connectionString
+     * @param connectionBuilder $connection
      * @return bool
      */
-    public abstract function initialize($connectionString);
+    public function initialize($connection){
+        $this->connectionValues = $connection;
+
+        $returnValue = $this->connect();
+
+        return($returnValue);
+    }
 
     /**
      * Opens a connection to the database

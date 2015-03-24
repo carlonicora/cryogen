@@ -171,7 +171,7 @@ abstract class queryEngine{
      * @param string $fieldName
      * @return bool
      */
-    public function setDynamicField(string $field, $fieldName){
+    public function setDynamicField($field, $fieldName){
         $this->dynamicFields[$fieldName] = $field;
 
         return(true);
