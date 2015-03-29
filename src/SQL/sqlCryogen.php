@@ -109,7 +109,9 @@ abstract class sqlCryogen extends cryogen {
             }
         }
 
-        if (!$noEntitiesModified){
+        if ($noEntitiesModified) {
+            $returnValue = true;
+        } else {
             if ($returnValue){
                 $returnValue = $this->completeActionTransaction($returnValue);
 
