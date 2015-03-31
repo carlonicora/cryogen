@@ -82,6 +82,10 @@ class cryogenException extends Exception {
         return($returnValue);
     }
 
+    /**
+     * @param null $seen
+     * @return array|string
+     */
     private function trace($seen=null) {
         $starter = $seen ? 'Caused by: ' : '';
         $result = array();

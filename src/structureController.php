@@ -68,6 +68,22 @@ abstract class structureController{
     public abstract function updateTable(metaTable $metaTable);
 
     /**
+     * Drops a table from the database using the meta table passed as parameter
+     *
+     * @param metaTable $metaTable
+     * @return bool
+     */
+    public abstract function dropTable(metaTable $metaTable);
+
+    /**
+     * Truncates a table on the database using the meta table passed as parameter
+     *
+     * @param metaTable $metaTable
+     * @return bool
+     */
+    public abstract function truncateTable(metaTable $metaTable);
+
+    /**
      * Generates the database object to use in the PHP code for the specified table
      *
      * @param metaTable $metaTable

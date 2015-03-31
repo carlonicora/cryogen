@@ -225,5 +225,25 @@ abstract class cryogen{
     public function updateTable(metaTable $metaTable){
         return($this->structureController->updateTable(($metaTable)));
     }
+
+    /**
+     * Drops a table from the database using the meta table passed as parameter
+     *
+     * @param metaTable $metaTable
+     * @return bool
+     */
+    public function dropTable(metaTable $metaTable){
+        return($this->structureController->dropTable(($metaTable)));
+    }
+
+    /**
+     * Truncates a table on the database using the meta table passed as parameter
+     *
+     * @param metaTable $metaTable
+     * @return bool
+     */
+    public function truncateTable(metaTable $metaTable){
+        return($this->structureController->truncateTable(($metaTable)));
+    }
 }
 ?>
