@@ -63,13 +63,13 @@ class discriminant{
     /**
      * Initialises the discriminant, setting the meta field and the value
      *
-     * @param metaField $metaField
+     * @param metaField|null $metaField
      * @param mixed $value
      * @param string $clause
      * @param string $connector
      * @param string $separator
      */
-    public function __construct(metaField $metaField, $value, $clause="=", $connector=" AND ", $separator = ""){
+    public function __construct(metaField $metaField=null, $value, $clause="=", $connector=" AND ", $separator = ""){
         $this->metaField = $metaField;
         $this->value = $value;
         $this->clause = $clause;

@@ -25,6 +25,7 @@ namespace CarloNicora\cryogen\SQL;
 use CarloNicora\cryogen\queryEngine;
 use CarloNicora\cryogen\discriminant;
 use CarloNicora\cryogen\metaField;
+use CarloNicora\cryogen\dynamicDiscriminant;
 
 /**
  * Class sqlQueryEngine
@@ -79,7 +80,7 @@ abstract class sqlQueryEngine extends queryEngine {
             foreach ($this->dynamicDiscriminant as $discriminant){
                 if (isset($discriminant->value)){
                     if (!is_object($discriminant->value)) {
-                        $returnValue[0] .= $this->getDiscriminantTypeCast($discriminant->metaField);
+                        $returnValue[0] .= $this->getDiscriminantTypeCast($discriminant);
                         $returnValue[1][] = $discriminant->value;
                     }
                 }
@@ -362,7 +363,7 @@ abstract class sqlQueryEngine extends queryEngine {
         $returnValue = '';
         if (isset($this->dynamicDiscriminant) && sizeof($this->dynamicDiscriminant) > 0){
             $returnValue .= ' HAVING ';
-            $returnValue .= $this->getWhereAndHavingClause();
+            $returnValue .= $this->getWhereAndHavingClause(false);
         }
 
         return($returnValue);
@@ -378,7 +379,7 @@ abstract class sqlQueryEngine extends queryEngine {
 
         if (isset($this->discriminants) && sizeof($this->discriminants) > 0){
             $returnValue .= ' WHERE ';
-            $returnValue .= $this->getWhereAndHavingClause();
+            $returnValue .= $this->getWhereAndHavingClause(true);
         }
 
         return($returnValue);
@@ -504,74 +505,89 @@ abstract class sqlQueryEngine extends queryEngine {
     /**
      * Returns the type of field to be passed as type of parameters to mySql for the sql query preparation
      *
-     * @param metaField $field
+     * @param mixed $field
      * @return string
      */
-    protected abstract function getDiscriminantTypeCast(metaField $field);
+    protected abstract function getDiscriminantTypeCast($field);
 
     /**
      * Returns the WHERE and HAVING common part of the clause
      *
+     * @var bool $isWhereClause
      * @return string
      */
-    protected function getWhereAndHavingClause(){
+    protected function getWhereAndHavingClause($isWhereClause){
         /**
-         * @var discriminant $discriminant
+         * @var discriminant|dynamicDiscriminant $discriminant
          */
         $returnValue = '';
 
-        for ($discriminantKey=0; $discriminantKey<sizeof($this->discriminants); $discriminantKey++){
-            $discriminant = $this->discriminants[$discriminantKey];
-            if (substr($discriminant->separator, 0, 1) == '('){
-                $returnValue .= $discriminant->separator;
-            }
-            $returnValue .= $discriminant->metaField->name;
+        $discriminantCount = ($isWhereClause) ? sizeof($this->discriminants) : sizeof($this->dynamicDiscriminant);
 
-            if ($discriminant->clause == '=' && !isset($discriminant->value)){
-                $returnValue .= ' IS NULL';
-            } else {
-                if (($discriminant->clause == '!=' || $discriminant->clause == '<>') && !isset($discriminant->value)){
-                    $returnValue .= ' IS NOT NULL';
+        for ($discriminantKey=0; $discriminantKey<$discriminantCount; $discriminantKey++){
+            $discriminant = ($isWhereClause) ? $this->discriminants[$discriminantKey] : $this->dynamicDiscriminant[$discriminantKey];
+            if (($isWhereClause && isset($discriminant->metaField)) || (!$isWhereClause && !isset($discriminant->metaField))) {
+                if (substr($discriminant->separator, 0, 1) == '(') {
+                    $returnValue .= $discriminant->separator;
+                }
+                if ($isWhereClause){
+                    $returnValue .= $discriminant->metaField->name;
                 } else {
-                    if ($discriminant->clause == ' *LIKE '){
-                        $returnValue .= ' LIKE ';
-                    } else if ($discriminant->clause == ' LIKE* '){
-                        $returnValue .= ' LIKE ';
+                    $returnValue .= $discriminant->fieldName;
+                }
+
+
+                if ($discriminant->clause == '=' && !isset($discriminant->value)) {
+                    $returnValue .= ' IS NULL';
+                } else {
+                    if (($discriminant->clause == '!=' || $discriminant->clause == '<>') && !isset($discriminant->value)) {
+                        $returnValue .= ' IS NOT NULL';
                     } else {
-                        $returnValue .= $discriminant->clause;
+                        if ($discriminant->clause == ' *LIKE ') {
+                            $returnValue .= ' LIKE ';
+                        } else if ($discriminant->clause == ' LIKE* ') {
+                            $returnValue .= ' LIKE ';
+                        } else {
+                            $returnValue .= $discriminant->clause;
+                        }
                     }
                 }
-            }
 
-            if ($discriminant->clause == ' LIKE '){
-                $returnValue .= "'%" . $discriminant->value . "%'";
-                unset($this->discriminants[$discriminantKey]);
-            } else if ($discriminant->clause == ' *LIKE '){
-                $returnValue .= "'%" . $discriminant->value . "'";
-                unset($this->discriminants[$discriminantKey]);
-            } else if ($discriminant->clause == ' LIKE* '){
-                $returnValue .= "'" . $discriminant->value . "%'";
-                unset($this->discriminants[$discriminantKey]);
-            } else if ($discriminant->clause == ' IN '){
-                $returnValue .= '(' . $discriminant->value . ')';
-                unset($this->discriminants[$discriminantKey]);
-            } else if ($discriminant->clause == ' NOT IN '){
-                $returnValue .= '(' . $discriminant->value . ')';
-                unset($this->discriminants[$discriminantKey]);
-            } else {
-                if (isset($discriminant->value)){
-                    if (is_object($discriminant->value) && $discriminant->value instanceof metaField){
-                        $returnValue .= $discriminant->value->name;
-                    } else {
-                        $returnValue .= '?';
+                $unset = true;
+                if ($discriminant->clause == ' LIKE ') {
+                    $returnValue .= "'%" . $discriminant->value . "%'";
+                } else if ($discriminant->clause == ' *LIKE ') {
+                    $returnValue .= "'%" . $discriminant->value . "'";
+                } else if ($discriminant->clause == ' LIKE* ') {
+                    $returnValue .= "'" . $discriminant->value . "%'";
+                } else if ($discriminant->clause == ' IN ') {
+                    $returnValue .= '(' . $discriminant->value . ')';
+                } else if ($discriminant->clause == ' NOT IN ') {
+                    $returnValue .= '(' . $discriminant->value . ')';
+                } else {
+                    $unset = false;
+                    if (isset($discriminant->value)) {
+                        if (is_object($discriminant->value) && $discriminant->value instanceof metaField) {
+                            $returnValue .= $discriminant->value->name;
+                        } else {
+                            $returnValue .= '?';
+                        }
                     }
                 }
-            }
 
-            if (substr($discriminant->separator, 0, 1) == ')'){
-                $returnValue .= $discriminant->separator;
+                if ($unset){
+                    if ($isWhereClause){
+                        unset($this->discriminants[$discriminantKey]);
+                    } else {
+                        unset($this->dynamicDiscriminant[$discriminantKey]);
+                    }
+                }
+
+                if (substr($discriminant->separator, 0, 1) == ')') {
+                    $returnValue .= $discriminant->separator;
+                }
+                $returnValue .= $discriminant->connector;
             }
-            $returnValue .= $discriminant->connector;
         }
         if (substr($returnValue, strlen($returnValue) - 5) == ' AND '){
             $returnValue = substr($returnValue, 0, strlen($returnValue) - 5);

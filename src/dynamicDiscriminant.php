@@ -32,6 +32,11 @@ class dynamicDiscriminant extends discriminant{
     public $fieldName;
 
     /**
+     * @var string
+     */
+    public $type;
+
+    /**
      * Initialises the discriminant for the virtual field with its value
      *
      * @param string $fieldName
@@ -43,7 +48,8 @@ class dynamicDiscriminant extends discriminant{
      */
     public function __construct($fieldName, $type, $value, $clause="=", $connector=" AND ", $separator=""){
         $this->fieldName = $fieldName;
-        parent::__construct(null, $type, $value, $clause, $connector, $separator);
+        $this->type = $type;
+        parent::__construct(null, $value, $clause, $connector, $separator);
     }
 }
 ?>
