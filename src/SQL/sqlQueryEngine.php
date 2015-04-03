@@ -207,7 +207,14 @@ abstract class sqlQueryEngine extends queryEngine {
         if (isset($this->keyFields) && sizeof($this->keyFields) > 0){
             foreach($this->keyFields as $discriminant){
                 if (isset($discriminant->value)){
-                    $returnValue .= $discriminant->metaField->name . $discriminant->clause . '?' . $discriminant->connector;
+                    if (substr($discriminant->separator, 0, 1) == '(') {
+                        $returnValue .= $discriminant->separator;
+                    }
+                    $returnValue .= $discriminant->metaField->name . $discriminant->clause . '?';
+                    if (substr($discriminant->separator, 0, 1) == ')') {
+                        $returnValue .= $discriminant->separator;
+                    }
+                    $returnValue .= $discriminant->connector;
                     $lastDiscriminant = $discriminant->connector;
                     $sqlGenerated = TRUE;
                 }
@@ -218,14 +225,28 @@ abstract class sqlQueryEngine extends queryEngine {
             if (isset($this->discriminants) && sizeof($this->discriminants) > 0){
                 foreach($this->discriminants as $discriminant){
                     if (isset($discriminant->value)){
-                        $returnValue .= $discriminant->metaField->name . $discriminant->clause . '?' . $discriminant->connector;
+                        if (substr($discriminant->separator, 0, 1) == '(') {
+                            $returnValue .= $discriminant->separator;
+                        }
+                        $returnValue .= $discriminant->metaField->name . $discriminant->clause . '?';
+                        if (substr($discriminant->separator, 0, 1) == ')') {
+                            $returnValue .= $discriminant->separator;
+                        }
+                        $returnValue .= $discriminant->connector;
                         $lastDiscriminant = $discriminant->connector;
                     }
                 }
             } else {
                 foreach ($this->normalFields as $discriminant){
                     if (isset($discriminant->value)){
-                        $returnValue .= $discriminant->metaField->name . $discriminant->clause . '?' . $discriminant->connector;
+                        if (substr($discriminant->separator, 0, 1) == '(') {
+                            $returnValue .= $discriminant->separator;
+                        }
+                        $returnValue .= $discriminant->metaField->name . $discriminant->clause . '?';
+                        if (substr($discriminant->separator, 0, 1) == ')') {
+                            $returnValue .= $discriminant->separator;
+                        }
+                        $returnValue .= $discriminant->connector;
                         $lastDiscriminant = $discriminant->connector;
                     }
                 }
