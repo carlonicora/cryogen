@@ -69,6 +69,14 @@ abstract class cryogen{
     }
 
     /**
+     * Returns if a database exists
+     *
+     * @param string $databaseName
+     * @return bool
+     */
+    public abstract function databaseExists($databaseName);
+
+    /**
      * Generates the query engines used in cryogen
      *
      * @param metaTable|null $meta
