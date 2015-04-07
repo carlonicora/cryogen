@@ -136,6 +136,8 @@ class entity{
                     $returnValue = (strcmp($this->_initialValues[$name], $this->$name) == 0) ? self::ENTITY_NOT_MODIFIED : self::ENTITY_MODIFIED;
                 } elseif ($field->type == 'tinyint'){
                     $returnValue = ($this->_initialValues[$name] == $this->$name) ? self::ENTITY_NOT_MODIFIED : self::ENTITY_MODIFIED;
+                } elseif ($field->type == 'float'){
+                    $returnValue = (abs($this->_initialValues[$name]-$this->$name) < 0.01) ? self::ENTITY_NOT_MODIFIED : self::ENTITY_MODIFIED;
                 } else {
                     $returnValue = ($this->_initialValues[$name] === $this->$name) ? self::ENTITY_NOT_MODIFIED : self::ENTITY_MODIFIED;
                 }
