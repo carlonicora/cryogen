@@ -50,5 +50,10 @@ class metaField{
         $this->isPrimaryKey = $isPrimaryKey;
         $this->isAutoNumbering = $isAutoNumbering;
     }
+
+    public function quotedName()
+    {
+        return "`{$this->name}`";
+    }
 }
 ?>
