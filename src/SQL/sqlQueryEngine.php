@@ -210,7 +210,7 @@ abstract class sqlQueryEngine extends queryEngine {
                     if (substr($discriminant->separator, 0, 1) == '(') {
                         $returnValue .= $discriminant->separator;
                     }
-                    $returnValue .= $discriminant->metaField->name . $discriminant->clause . '?';
+                    $returnValue .= $discriminant->metaField->quotedName() . $discriminant->clause . '?';
                     if (substr($discriminant->separator, 0, 1) == ')') {
                         $returnValue .= $discriminant->separator;
                     }
@@ -228,7 +228,7 @@ abstract class sqlQueryEngine extends queryEngine {
                         if (substr($discriminant->separator, 0, 1) == '(') {
                             $returnValue .= $discriminant->separator;
                         }
-                        $returnValue .= $discriminant->metaField->name . $discriminant->clause . '?';
+                        $returnValue .= $discriminant->metaField->quotedName() . $discriminant->clause . '?';
                         if (substr($discriminant->separator, 0, 1) == ')') {
                             $returnValue .= $discriminant->separator;
                         }
@@ -242,7 +242,7 @@ abstract class sqlQueryEngine extends queryEngine {
                         if (substr($discriminant->separator, 0, 1) == '(') {
                             $returnValue .= $discriminant->separator;
                         }
-                        $returnValue .= $discriminant->metaField->name . $discriminant->clause . '?';
+                        $returnValue .= $discriminant->metaField->quotedName() . $discriminant->clause . '?';
                         if (substr($discriminant->separator, 0, 1) == ')') {
                             $returnValue .= $discriminant->separator;
                         }
@@ -329,7 +329,7 @@ abstract class sqlQueryEngine extends queryEngine {
         $returnValue = '';
 
         foreach ($this->meta->fields as $metaField){
-            $returnValue .= 'COUNT(' . $metaField->name . ') as Count ';
+            $returnValue .= 'COUNT(' . $metaField->quotedName() . ') as Count ';
             break;
         }
 
@@ -459,7 +459,7 @@ abstract class sqlQueryEngine extends queryEngine {
         $returnValue = '';
 
         foreach($this->keyFields as $discriminant){
-            $returnValue .= $discriminant->metaField->name . $discriminant->clause . '? AND ';
+            $returnValue .= $discriminant->metaField->quotedName() . $discriminant->clause . '? AND ';
         }
 
         $returnValue = substr($returnValue, 0, strlen($returnValue)-5);
@@ -480,12 +480,12 @@ abstract class sqlQueryEngine extends queryEngine {
 
         foreach ($this->keyFields as $discriminant){
             if ($discriminant->isChanged){
-                $returnValue .= $discriminant->metaField->name . $discriminant->clause . '?, ';
+                $returnValue .= $discriminant->metaField->quotedName() . $discriminant->clause . '?, ';
             }
         }
         foreach($this->normalFields as $discriminant){
             if ($discriminant->isChanged){
-                $returnValue .= $discriminant->metaField->name . $discriminant->clause . '?, ';
+                $returnValue .= $discriminant->metaField->quotedName() . $discriminant->clause . '?, ';
             }
         }
 
@@ -505,13 +505,13 @@ abstract class sqlQueryEngine extends queryEngine {
 
         foreach ($this->keyFields as $discriminant) {
             if (!$discriminant->metaField->isAutoNumbering) {
-                $returnValue .= $discriminant->metaField->name . ', ';
+                $returnValue .= $discriminant->metaField->quotedName() . ', ';
                 $fieldParams .= '?, ';
             }
         }
 
         foreach ($this->normalFields as $discriminant) {
-            $returnValue .= $discriminant->metaField->name . ', ';
+            $returnValue .= $discriminant->metaField->quotedName() . ', ';
             $fieldParams .= '?, ';
         }
 
@@ -552,7 +552,7 @@ abstract class sqlQueryEngine extends queryEngine {
                     $returnValue .= $discriminant->separator;
                 }
                 if ($isWhereClause){
-                    $returnValue .= $discriminant->metaField->name;
+                    $returnValue .= $discriminant->metaField->quotedName();
                 } else {
                     $returnValue .= $discriminant->fieldName;
                 }
