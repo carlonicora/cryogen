@@ -153,7 +153,11 @@ abstract class sqlQueryEngine extends queryEngine {
      */
     public function generateInsertStatement(){
         $fieldParams = '';
-        $returnValue = 'INSERT INTO '.$this->meta->name.' ('.$this->getInsertFields($fieldParams).') VALUES ('.$fieldParams.');';
+        $returnValue = 'INSERT ';
+        if ($this->meta->insertIgnore){
+            $returnValue .='IGNORE ';
+        }
+        $returnValue .= 'INTO '.$this->meta->name.' ('.$this->getInsertFields($fieldParams).') VALUES ('.$fieldParams.');';
 
         return($returnValue);
     }

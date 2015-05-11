@@ -46,6 +46,11 @@ class metaTable{
     public $relations;
 
     /**
+     * @var bool
+     */
+    public $insertIgnore;
+
+    /**
      * Initialises the meta table with the name of the table in the database and the fully qualified name of the object
      *
      * @param string $name
@@ -54,6 +59,7 @@ class metaTable{
     public function __construct($name, $object) {
         $this->name = $name;
         $this->object = $object;
+        $this->insertIgnore = false;
         $this->fields = new metaFields();
         $this->relations = [];
     }
