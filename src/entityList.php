@@ -86,5 +86,40 @@ class entityList extends ArrayObject{
 
         return($returnValue);
     }
+
+    /**
+     * Returns a list of entities matching the required field/values
+     *
+     * @param array $fields
+     * @return entity
+     */
+    public function getFirstEntityByFields($fields){
+        $returnValue = null;
+
+        if (!$this->meta){
+            if ($this[0]){
+                $this->meta = $this[0]->metaTable;
+            }
+        }
+
+        foreach ($this as $entity){
+            $returnableEntity = $entity;
+
+            foreach ($fields as $field){
+                $fieldName = $field[0]->name;
+                if ($entity->$fieldName != $field[1]){
+                    $returnableEntity = null;
+                    break;
+                }
+            }
+
+            if (isset($returnableEntity)){
+                $returnValue = $returnableEntity;
+                break;
+            }
+        }
+
+        return($returnValue);
+    }
 }
 ?>
