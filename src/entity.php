@@ -132,7 +132,7 @@ class entity{
         if ($this->entityStatus){
             foreach ($this->metaTable->fields as $field){
                 $name = $field->name;
-                if ($field->type == 'varchar') {
+                if ($field->type == 'varchar' || $field->type == 'char') {
                     $returnValue = (strcmp($this->_initialValues[$name], $this->$name) == 0) ? self::ENTITY_NOT_MODIFIED : self::ENTITY_MODIFIED;
                 } elseif ($field->type == 'tinyint'){
                     $returnValue = ($this->_initialValues[$name] == $this->$name) ? self::ENTITY_NOT_MODIFIED : self::ENTITY_MODIFIED;
@@ -169,7 +169,7 @@ class entity{
                 $initialValue = $this->_initialValues[$name];
                 $newValue = $this->$name;
 
-                if ($field->type == 'varchar' && !strcmp($initialValue, $newValue) == 0) {
+                if (($field->type == 'varchar' || $field->type == 'char') && !strcmp($initialValue, $newValue) == 0) {
                     $returnValue[$name] = $initialValue;
                 } elseif ($field->type == 'tinyint' && $initialValue != $newValue){
                     $returnValue[$name] = $initialValue;
