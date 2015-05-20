@@ -84,6 +84,11 @@ abstract class queryEngine{
     protected $dynamicDiscriminant;
 
     /**
+     * @var string
+     */
+    public $key;
+
+    /**
      * Initialises the query engine, identifying the metaTable or the entity that will define the table that will
      * be managed through it
      *

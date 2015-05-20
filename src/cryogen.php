@@ -92,9 +92,10 @@ abstract class cryogen{
      * If the entity is not existing in the database, cryogen performs an INSERT, otherwise an UPDATE
      *
      * @param entity|entityList $entity
+     * @param string $key
      * @return bool
      */
-    public abstract function update($entity);
+    public abstract function update($entity, $key=null);
 
     /**
      * Deletes an entity in the database.
