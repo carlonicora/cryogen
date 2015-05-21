@@ -570,6 +570,10 @@ abstract class sqlQueryEngine extends queryEngine {
                     } else {
                         if ($discriminant->clause == ' *LIKE ') {
                             $returnValue .= ' LIKE ';
+                        } else if ($discriminant->clause == ' NOT LIKE* ') {
+                            $returnValue .= ' NOT LIKE ';
+                        } else if ($discriminant->clause == ' *NOT LIKE ') {
+                            $returnValue .= ' NOT LIKE ';
                         } else if ($discriminant->clause == ' LIKE* ') {
                             $returnValue .= ' LIKE ';
                         } else {
@@ -584,6 +588,12 @@ abstract class sqlQueryEngine extends queryEngine {
                 } else if ($discriminant->clause == ' *LIKE ') {
                     $returnValue .= "'%" . $discriminant->value . "'";
                 } else if ($discriminant->clause == ' LIKE* ') {
+                    $returnValue .= "'" . $discriminant->value . "%'";
+                } else if ($discriminant->clause == ' NOT LIKE ') {
+                    $returnValue .= "'%" . $discriminant->value . "*'";
+                } else if ($discriminant->clause == ' *NOT LIKE ') {
+                    $returnValue .= "'%" . $discriminant->value . "'";
+                } else if ($discriminant->clause == ' NOT LIKE* ') {
                     $returnValue .= "'" . $discriminant->value . "%'";
                 } else if ($discriminant->clause == ' IN ') {
                     $returnValue .= '(' . $discriminant->value . ')';
