@@ -86,6 +86,14 @@ class entity{
     }
 
     /**
+     * Resets the entity
+     */
+    public function resetEntityStatus(){
+        $this->entityStatus = false;
+        $this->_initialValues = [];
+    }
+
+    /**
      * Set the flag that the entity has been retrieved from the databse instead of being a brand new record
      */
     public function setRetrieved(){
