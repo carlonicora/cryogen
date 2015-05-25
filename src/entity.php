@@ -195,8 +195,6 @@ class entity{
         if (isset($object->_initialValues)) {
             $this->_initialValues = $object->_initialValues;
         }
-        $this->entityRetrieved = $object->entityRetrieved;
-        $this->entityStatus = $object->entityStatus;
         $this->isEntityList = false;
 
         return($returnValue);
