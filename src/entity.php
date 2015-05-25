@@ -182,5 +182,24 @@ class entity{
         }
         return($returnValue);
     }
+
+    public function rebuildFromObject($object){
+        $returnValue = true;
+
+        /** @var metaField $metaField */
+        foreach ($this->metaTable->fields as $metaField){
+            $fieldName = $metaField->name;
+            $this->$fieldName = $object->$fieldName;
+        }
+
+        if (isset($object->_initialValues)) {
+            $this->_initialValues = $object->_initialValues;
+        }
+        $this->entityRetrieved = $object->entityRetrieved;
+        $this->entityStatus = $object->entityStatus;
+        $this->isEntityList = false;
+
+        return($returnValue);
+    }
 }
 ?>

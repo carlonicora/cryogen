@@ -69,7 +69,7 @@ class discriminant{
      * @param string $connector
      * @param string $separator
      */
-    public function __construct(metaField $metaField=null, $value, $clause="=", $connector=" AND ", $separator = ""){
+    public function __construct($metaField=null, $value, $clause="=", $connector=" AND ", $separator = ""){
         $this->metaField = $metaField;
         $this->value = $value;
         $this->clause = $clause;
