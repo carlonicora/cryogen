@@ -54,10 +54,9 @@ abstract class sqlCryogen extends cryogen {
      * If the entity is not existing in the database, cryogen performs an INSERT, otherwise an UPDATE
      *
      * @param entity|entityList $entity
-     * @param string $key
      * @return bool
      */
-    public function update($entity, $key=null){
+    public function update($entity){
         /**
          * @var entity $entity
          * @var queryEngine $engine
