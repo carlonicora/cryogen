@@ -42,7 +42,7 @@ class metaField{
      * @param bool $isPrimaryKey
      * @param bool $isAutoNumbering
      */
-    public function __construct($position, $fieldName, $fieldType, $fieldSize, $isPrimaryKey, $isAutoNumbering){
+    public function __construct($position, $fieldName, $fieldType='varchar', $fieldSize=0, $isPrimaryKey=false, $isAutoNumbering=false){
         $this->position = $position;
         $this->name = $fieldName;
         $this->type = $fieldType;

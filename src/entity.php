@@ -106,7 +106,7 @@ class entity{
     public function setInitialValues(){
         foreach($this->metaTable->fields as $field){
             $name = $field->name;
-            $this->_initialValues[$name] = $this->$name;
+            if (isset($this->$name)) $this->_initialValues[$name] = $this->$name;
         }
 
         if (isset($this->metaTable->relations) && sizeof($this->metaTable->relations) > 0){
@@ -140,14 +140,21 @@ class entity{
         if ($this->entityStatus){
             foreach ($this->metaTable->fields as $field){
                 $name = $field->name;
-                if ($field->type == 'varchar' || $field->type == 'char') {
-                    $returnValue = (strcmp($this->_initialValues[$name], $this->$name) == 0) ? self::ENTITY_NOT_MODIFIED : self::ENTITY_MODIFIED;
-                } elseif ($field->type == 'tinyint'){
-                    $returnValue = ($this->_initialValues[$name] == $this->$name) ? self::ENTITY_NOT_MODIFIED : self::ENTITY_MODIFIED;
-                } elseif ($field->type == 'float'){
-                    $returnValue = (abs($this->_initialValues[$name]-$this->$name) < 0.01) ? self::ENTITY_NOT_MODIFIED : self::ENTITY_MODIFIED;
+
+                if (!isset($this->_initialValues[$name]) && !isset($this->$name)){
+                    $returnValue = self::ENTITY_NOT_MODIFIED;
+                } else if (!isset($this->_initialValues[$name]) || !isset($this->$name)){
+                    $returnValue = self::ENTITY_MODIFIED;
                 } else {
-                    $returnValue = ($this->_initialValues[$name] === $this->$name) ? self::ENTITY_NOT_MODIFIED : self::ENTITY_MODIFIED;
+                    if ($field->type == 'varchar' || $field->type == 'char') {
+                        $returnValue = (strcmp($this->_initialValues[$name], $this->$name) == 0) ? self::ENTITY_NOT_MODIFIED : self::ENTITY_MODIFIED;
+                    } elseif ($field->type == 'tinyint') {
+                        $returnValue = ($this->_initialValues[$name] == $this->$name) ? self::ENTITY_NOT_MODIFIED : self::ENTITY_MODIFIED;
+                    } elseif ($field->type == 'float') {
+                        $returnValue = (abs($this->_initialValues[$name] - $this->$name) < 0.01) ? self::ENTITY_NOT_MODIFIED : self::ENTITY_MODIFIED;
+                    } else {
+                        $returnValue = ($this->_initialValues[$name] === $this->$name) ? self::ENTITY_NOT_MODIFIED : self::ENTITY_MODIFIED;
+                    }
                 }
 
                 if ($returnValue == self::ENTITY_MODIFIED){
@@ -174,15 +181,20 @@ class entity{
             $returnValue = [];
             foreach ($this->metaTable->fields as $field){
                 $name = $field->name;
-                $initialValue = $this->_initialValues[$name];
+                $newValue = null;
                 $newValue = $this->$name;
+                if (isset($this->_initialValues[$name])) {
+                    $initialValue = $this->_initialValues[$name];
+                } else {
+                    $initialValue = null;
+                }
 
                 if (($field->type == 'varchar' || $field->type == 'char') && !strcmp($initialValue, $newValue) == 0) {
                     $returnValue[$name] = $initialValue;
-                } elseif ($field->type == 'tinyint' && $initialValue != $newValue){
+                } elseif ($field->type == 'tinyint' && $initialValue != $newValue) {
                     $returnValue[$name] = $initialValue;
                 } else {
-                    if ($initialValue !== $newValue){
+                    if ($initialValue !== $newValue) {
                         $returnValue[$name] = $initialValue;
                     }
                 }
@@ -197,7 +209,7 @@ class entity{
         /** @var metaField $metaField */
         foreach ($this->metaTable->fields as $metaField){
             $fieldName = $metaField->name;
-            $this->$fieldName = $object->$fieldName;
+            if (isset($object->$fieldName)) $this->$fieldName = $object->$fieldName;
         }
 
         if (isset($object->_initialValues)) {
