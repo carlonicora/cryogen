@@ -121,5 +121,41 @@ class entityList extends ArrayObject{
 
         return($returnValue);
     }
+
+    /**
+     * Replace the first entity matching the required field/values with the passed entity
+     *
+     * @param array $fields
+     * @param entity $newEntity
+     * @return bool
+     */
+    public function replaceFirstEntityByFields($fields, $newEntity){
+        $returnValue = null;
+
+        if (!$this->meta){
+            if ($this[0]){
+                $this->meta = $this[0]->metaTable;
+            }
+        }
+
+        foreach ($this as &$entity){
+            $returnableEntity = $entity;
+
+            foreach ($fields as $field){
+                $fieldName = $field[0]->name;
+                if ($entity->$fieldName != $field[1]){
+                    $returnableEntity = null;
+                    break;
+                }
+            }
+
+            if (isset($returnableEntity)){
+                $entity = $newEntity;
+                return(true);
+            }
+        }
+
+        return(false);
+    }
 }
 ?>
