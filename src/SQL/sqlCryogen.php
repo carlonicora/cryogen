@@ -16,24 +16,24 @@
  *
  * @license Apache
  * @license http://www.apache.org/licenses/LICENSE-2.0
- * @package CarloNicora\cryogen\mySqlCryogen
+ * @package carlonicora\cryogen\mySqlCryogen
  * @author Carlo Nicora
  */
-namespace CarloNicora\cryogen\SQL;
+namespace carlonicora\cryogen\SQL;
 
-use CarloNicora\cryogen\cryogen;
+use carlonicora\cryogen\cryogen;
 
-use CarloNicora\cryogen\cryogenException;
-use CarloNicora\cryogen\entity;
-use CarloNicora\cryogen\entityList;
-use CarloNicora\cryogen\queryEngine;
-use CarloNicora\cryogen\metaTable;
-use CarloNicora\cryogen\metaField;
+use carlonicora\cryogen\cryogenException;
+use carlonicora\cryogen\entity;
+use carlonicora\cryogen\entityList;
+use carlonicora\cryogen\queryEngine;
+use carlonicora\cryogen\metaTable;
+use carlonicora\cryogen\metaField;
 
 /**
  * Class sqlCryogen
  *
- * @package CarloNicora\cryogen\SQL
+ * @package carlonicora\cryogen\SQL
  */
 abstract class sqlCryogen extends cryogen {
     /**

@@ -16,15 +16,15 @@
  *
  * @license Apache
  * @license http://www.apache.org/licenses/LICENSE-2.0
- * @package CarloNicora\cryogen
+ * @package carlonicora\cryogen
  * @author Carlo Nicora
  */
-namespace CarloNicora\cryogen;
+namespace carlonicora\cryogen;
 
 /**
  * Class cryogenConnectionBuilder
  *
- * @package CarloNicora\cryogen
+ * @package carlonicora\cryogen
  */
 abstract class connectionBuilder {
     /**
@@ -42,7 +42,7 @@ abstract class connectionBuilder {
          */
         $databaseType = $connectionValues['type'];
 
-        $cryogenConnectionBuilder = '\\CarloNicora\\cryogen\\'.$databaseType.'Cryogen\\'.$databaseType.'ConnectionBuilder';
+        $cryogenConnectionBuilder = '\\carlonicora\\cryogen\\'.$databaseType.'Cryogen\\'.$databaseType.'ConnectionBuilder';
         $returnValue = new $cryogenConnectionBuilder();
         $returnValue->initialise($connectionValues);
 

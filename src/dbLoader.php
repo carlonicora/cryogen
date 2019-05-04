@@ -1,11 +1,11 @@
 <?php
-namespace CarloNicora\cryogen;
+namespace carlonicora\cryogen;
 
-use CarloNicora\cryogen\cryogen;
-use CarloNicora\cryogen\queryEngine;
-use CarloNicora\cryogen\entityList;
-use CarloNicora\cryogen\entity;
-use CarloNicora\cryogen\metaTable;
+use carlonicora\cryogen\cryogen;
+use carlonicora\cryogen\queryEngine;
+use carlonicora\cryogen\entityList;
+use carlonicora\cryogen\entity;
+use carlonicora\cryogen\metaTable;
 
 abstract class dbLoader{
     /**

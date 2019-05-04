@@ -16,10 +16,10 @@
  *
  * @license Apache
  * @license http://www.apache.org/licenses/LICENSE-2.0
- * @package CarloNicora\cryogen
+ * @package carlonicora\cryogen
  * @author Carlo Nicora
  */
-namespace CarloNicora\cryogen;
+namespace carlonicora\cryogen;
 
 /**
  * The meta table is the object view of a db table

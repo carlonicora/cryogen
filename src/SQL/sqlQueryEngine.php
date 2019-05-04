@@ -16,21 +16,21 @@
  *
  * @license Apache
  * @license http://www.apache.org/licenses/LICENSE-2.0
- * @package CarloNicora\cryogen\mySqlCryogen
+ * @package carlonicora\cryogen\mySqlCryogen
  * @author Carlo Nicora
  */
 
-namespace CarloNicora\cryogen\SQL;
+namespace carlonicora\cryogen\SQL;
 
-use CarloNicora\cryogen\queryEngine;
-use CarloNicora\cryogen\discriminant;
-use CarloNicora\cryogen\metaField;
-use CarloNicora\cryogen\dynamicDiscriminant;
+use carlonicora\cryogen\queryEngine;
+use carlonicora\cryogen\discriminant;
+use carlonicora\cryogen\metaField;
+use carlonicora\cryogen\dynamicDiscriminant;
 
 /**
  * Class sqlQueryEngine
  *
- * @package CarloNicora\cryogen\SQL
+ * @package carlonicora\cryogen\SQL
  */
 abstract class sqlQueryEngine extends queryEngine {
     /**

@@ -1,5 +1,5 @@
 {
-    "name": "carlo-nicora/cryogen",
+    "name": "carlonicora/cryogen",
     "description": "Cryogen is a PHP object-oriented database persistency layer",
     "type": "library",
     "keywords": ["cryogen", "php", "database", "persistency layer", "persistency"],
@@ -20,7 +20,7 @@
     },
     "autoload": {
         "psr-4": {
-            "CarloNicora\\cryogen\\": "src/"
+            "carlonicora\\cryogen\\": "src/"
         }
     }
 }

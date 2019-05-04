@@ -16,15 +16,15 @@
  *
  * @license Apache
  * @license http://www.apache.org/licenses/LICENSE-2.0
- * @package CarloNicora\cryogen
+ * @package carlonicora\cryogen
  * @author Carlo Nicora
  */
-namespace CarloNicora\cryogen;
+namespace carlonicora\cryogen;
 
 /**
  * Class cryogenBuilder
  *
- * @package CarloNicora\cryogen
+ * @package carlonicora\cryogen
  */
 class cryogenBuilder {
     /**
@@ -34,7 +34,7 @@ class cryogenBuilder {
      * @return cryogen
      */
     public static function bootstrap(connectionBuilder $connection){
-        $cryogen = '\\CarloNicora\\cryogen\\'.$connection->databaseType.'Cryogen\\'.$connection->databaseType.'Cryogen';
+        $cryogen = '\\carlonicora\\cryogen\\'.$connection->databaseType.'Cryogen\\'.$connection->databaseType.'Cryogen';
 
         $returnValue = new $cryogen($connection);
 

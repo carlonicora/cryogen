@@ -16,10 +16,10 @@
  *
  * @license Apache
  * @license http://www.apache.org/licenses/LICENSE-2.0
- * @package CarloNicora\cryogen
+ * @package carlonicora\cryogen
  * @author Carlo Nicora
  */
-namespace CarloNicora\cryogen;
+namespace carlonicora\cryogen;
 
 /**
  * The metaRelation class identifies a relation between two tables managing primary key and foreign key in two tables
