@@ -42,7 +42,7 @@ abstract class connectionBuilder {
          */
         $databaseType = $connectionValues['type'];
 
-        $cryogenConnectionBuilder = '\\carlonicora\\cryogen\\'.$databaseType.'Cryogen\\'.$databaseType.'ConnectionBuilder';
+        $cryogenConnectionBuilder = '\\carlonicora\\cryogen\\'.$databaseType.'cryogen\\'.$databaseType.'ConnectionBuilder';
         $returnValue = new $cryogenConnectionBuilder();
         $returnValue->initialise($connectionValues);
 
