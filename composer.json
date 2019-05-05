@@ -1,4 +1,5 @@
 {
+    "name": "carlonicora/cryogen",
     "autoload": {
         "psr-4": {
             "carlonicora\\cryogen\\": "src/"
