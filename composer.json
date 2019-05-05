@@ -1,23 +1,4 @@
 {
-    "name": "carlonicora/cryogen",
-    "description": "Cryogen is a PHP object-oriented database persistency layer",
-    "type": "library",
-    "keywords": ["cryogen", "php", "database", "persistency layer", "persistency"],
-    "homepage": "http://carlonicora.com",
-    "time": "2015-03-16",
-    "license": "Apache-2.0",
-    "authors": [
-        {
-            "name": "Carlo Nicora",
-            "email": "carlo.nicora@gmail.com",
-            "homepage": "http://carlonicora.com",
-            "role": "Developer"
-        }
-    ],
-    "require": {
-    },
-    "require-dev": {
-    },
     "autoload": {
         "psr-4": {
             "carlonicora\\cryogen\\": "src/"
