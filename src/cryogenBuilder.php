@@ -34,7 +34,7 @@ class cryogenBuilder {
      * @return cryogen
      */
     public static function bootstrap(connectionBuilder $connection){
-        $cryogen = '\\carlonicora\\cryogen\\'.$connection->databaseType.'cryogen\\'.$connection->databaseType.'Cryogen';
+        $cryogen = '\\carlonicora\\cryogen\\'.$connection->databaseType.'cryogen\\'.$connection->databaseType.'cryogen';
 
         $returnValue = new $cryogen($connection);
 
