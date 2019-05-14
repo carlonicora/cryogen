@@ -179,4 +179,3 @@ abstract class structureController{
         return($returnValue);
     }
 }
-?>

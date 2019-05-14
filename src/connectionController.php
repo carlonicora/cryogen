@@ -89,4 +89,3 @@ abstract class connectionController{
      */
     public abstract function isConnected();
 }
-?>

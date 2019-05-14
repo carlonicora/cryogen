@@ -75,4 +75,3 @@ class metaRelation{
         $this->relationType = $relationType;
     }
 }
-?>

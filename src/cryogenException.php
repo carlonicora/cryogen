@@ -118,9 +118,8 @@ class cryogenException extends Exception {
         }
         $result = join("\n", $result);
         if ($prev)
-            $result  .= "\n" . $this->trace($prev, $seen);
+            $result  .= "\n" . $this->trace($prev);
 
         return $result;
     }
 }
-?>

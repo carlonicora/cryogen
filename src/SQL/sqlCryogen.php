@@ -87,20 +87,15 @@ abstract class sqlCryogen extends cryogen {
 
                 $engine = $this->generateQueryEngine(NULL, $entity);
 
-                try{
-                    $sqlStatement = $entity->status() == entity::ENTITY_NOT_RETRIEVED ? $engine->generateInsertStatement() : $engine->generateUpdateStatement();
-                    $sqlParameters = $entity->status() == entity::ENTITY_NOT_RETRIEVED ? $engine->generateInsertParameters() : $engine->generateUpdateParameters();
+                $sqlStatement = $entity->status() == entity::ENTITY_NOT_RETRIEVED ? $engine->generateInsertStatement() : $engine->generateUpdateStatement();
+                $sqlParameters = $entity->status() == entity::ENTITY_NOT_RETRIEVED ? $engine->generateInsertParameters() : $engine->generateUpdateParameters();
 
-                    if ($entity->status() == entity::ENTITY_NOT_RETRIEVED && $engine->hasAutoIncrementKey()){
-                        $keyField = $engine->getAutoIncrementKeyName();
-                        $entity->$keyField = true;
-                        $returnValue = $this->setActionTransaction($sqlStatement, $sqlParameters, false, $entity->$keyField);
-                    } else {
-                        $returnValue = $this->setActionTransaction($sqlStatement, $sqlParameters);
-                    }
-                } catch (cryogenException $exception){
-                    $exception->log();
-                    $returnValue = null;
+                if ($entity->status() == entity::ENTITY_NOT_RETRIEVED && $engine->hasAutoIncrementKey()){
+                    $keyField = $engine->getAutoIncrementKeyName();
+                    $entity->$keyField = true;
+                    $returnValue = $this->setActionTransaction($sqlStatement, $sqlParameters, false, $entity->$keyField);
+                } else {
+                    $returnValue = $this->setActionTransaction($sqlStatement, $sqlParameters);
                 }
 
                 if (!$returnValue){
@@ -172,30 +167,20 @@ abstract class sqlCryogen extends cryogen {
                         $engine = $this->generateQueryEngine(null, $entity);
                     }
 
-                    try{
-                        $sqlStatement = $engine->generateDeleteStatement();
-                        $sqlParameters = $engine->generateDeleteParameters();
+                    $sqlStatement = $engine->generateDeleteStatement();
+                    $sqlParameters = $engine->generateDeleteParameters();
 
-                        $returnValue = $this->setActionTransaction($sqlStatement, $sqlParameters, true);
-                    } catch (cryogenException $exception){
-                        $exception->log();
-                        $returnValue = null;
-                    }
+                    $returnValue = $this->setActionTransaction($sqlStatement, $sqlParameters, true);
 
                     if (!$returnValue) {
                         break;
                     }
                 }
             } else {
-                try{
-                    $sqlStatement = $engine->generateDeleteStatement();
-                    $sqlParameters = $engine->generateDeleteParameters();
+                $sqlStatement = $engine->generateDeleteStatement();
+                $sqlParameters = $engine->generateDeleteParameters();
 
-                    $returnValue = $this->setActionTransaction($sqlStatement, $sqlParameters, true);
-                } catch (cryogenException $exception){
-                    $exception->log();
-                    $returnValue = null;
-                }
+                $returnValue = $this->setActionTransaction($sqlStatement, $sqlParameters, true);
             }
 
             if ($returnValue) {
@@ -228,15 +213,10 @@ abstract class sqlCryogen extends cryogen {
         $this->connectionController->connect();
         $originalEngine = $engine;
 
-        try{
-            $sqlStatement = $engine->generateReadStatement();
-            $sqlParameters = $engine->generateReadParameters();
+        $sqlStatement = $engine->generateReadStatement();
+        $sqlParameters = $engine->generateReadParameters();
 
-            $returnValue = $this->setReadTransaction($engine, $sqlStatement, $sqlParameters);
-        } catch (cryogenException $exception){
-            $exception->log();
-            $returnValue = null;
-        }
+        $returnValue = $this->setReadTransaction($engine, $sqlStatement, $sqlParameters);
 
         if ($levelsOfRelationsToLoad > 0 && ($returnValue && sizeof($returnValue) > 0)){
             if (isset($engine->meta->relations) && sizeof($engine->meta->relations) > 0){
@@ -326,18 +306,12 @@ abstract class sqlCryogen extends cryogen {
         /**
          * @var array $sqlParameters;
          */
-        $returnValue = 0;
-
         $this->connectionController->connect();
 
-        try{
-            $sqlStatement = $engine->generateReadCountStatement();
-            $sqlParameters = $engine->generateReadParameters();
+        $sqlStatement = $engine->generateReadCountStatement();
+        $sqlParameters = $engine->generateReadParameters();
 
-            $returnValue = $this->setCountTransaction($engine, $sqlStatement, $sqlParameters);
-        } catch (cryogenException $exception){
-            $exception->log();
-        }
+        $returnValue = $this->setCountTransaction($engine, $sqlStatement, $sqlParameters);
 
         return($returnValue);
     }

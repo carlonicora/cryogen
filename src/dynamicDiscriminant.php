@@ -52,4 +52,3 @@ class dynamicDiscriminant extends discriminant{
         parent::__construct(null, $value, $clause, $connector, $separator);
     }
 }
-?>

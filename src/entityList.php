@@ -1,4 +1,5 @@
-<?php
+<?php /** @noinspection PhpMissingParentConstructorInspection */
+
 /**
  * Copyright 2015 Carlo Nicora
  *
@@ -158,4 +159,3 @@ class entityList extends ArrayObject{
         return(false);
     }
 }
-?>

@@ -84,4 +84,3 @@ class metaTable{
         return ($returnValue);
     }
 }
-?>

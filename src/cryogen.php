@@ -254,4 +254,3 @@ abstract class cryogen{
         return($this->structureController->truncateTable(($metaTable)));
     }
 }
-?>

@@ -61,4 +61,3 @@ class metaFields extends ArrayObject{
         return($returnValue);
     }
 }
-?>

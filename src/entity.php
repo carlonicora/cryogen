@@ -121,6 +121,7 @@ class entity{
                 } else {
                     $entityList = $this->$target;
                     if (isset($entityList)){
+                        /** @var entity $entity */
                         foreach($entityList as $entity){
                             $entity->setInitialValues();
                         }
@@ -220,4 +221,3 @@ class entity{
         return($returnValue);
     }
 }
-?>

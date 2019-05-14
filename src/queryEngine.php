@@ -373,4 +373,3 @@ abstract class queryEngine{
      */
     public abstract function generateDeleteParameters();
 }
-?>
