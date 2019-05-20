@@ -106,7 +106,7 @@ class entity{
     public function setInitialValues(){
         foreach($this->metaTable->fields as $field){
             $name = $field->name;
-            if (isset($this->$name)) $this->_initialValues[$name] = $this->$name;
+            $this->_initialValues[$name] = $this->$name;
         }
 
         if (isset($this->metaTable->relations) && sizeof($this->metaTable->relations) > 0){
@@ -165,6 +165,44 @@ class entity{
         }
 
         return($returnValue);
+    }
+
+    /**
+     * @param bool $useJson
+     * @return array
+     */
+    public function getPublicObject($useJson=false){
+        $response = array();
+
+        foreach ($this->metaTable->fields as $field){
+            $fieldName = $field->name;
+            $fieldValue = $this->$fieldName;
+
+            $response[$fieldName] = $fieldValue;
+        }
+
+        if ($useJson) $response = json_encode($response);
+
+        return($response);
+    }
+
+    /**
+     * @param bool $useJson
+     * @return array
+     */
+    public function getPublicInitialObject($useJson=false){
+        $response = array();
+
+        foreach ($this->metaTable->fields as $field){
+            $fieldName = $field->name;
+            $fieldValue = $this->_initialValues[$fieldName];
+
+            $response[$fieldName] = $fieldValue;
+        }
+
+        if ($useJson) $response = json_encode($response);
+
+        return($response);
     }
 
     /**
