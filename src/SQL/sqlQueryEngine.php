@@ -346,17 +346,21 @@ abstract class sqlQueryEngine extends queryEngine {
      * @return string
      */
     protected function getSelectedFields(){
-        $returnValue = '*';
-        if (isset($this->selectedFields) && sizeof($this->selectedFields) > 0){
-            $returnValue = '';
-            foreach ($this->selectedFields as $metaField){
-                if ($metaField['sql'] && $metaField['sql'] != ''){
-                    $returnValue .= $metaField['sql'] . '(' . $metaField['field']->name . ') as ' . $metaField['field']->name . ', ';
-                } else {
-                    $returnValue .= $metaField['field']->name . ', ';
+        $returnValue = '';
+
+        if (!$this->removeDefaultFields) {
+            $returnValue = '*';
+            if (isset($this->selectedFields) && sizeof($this->selectedFields) > 0) {
+                $returnValue = '';
+                foreach ($this->selectedFields as $metaField) {
+                    if ($metaField['sql'] && $metaField['sql'] != '') {
+                        $returnValue .= $metaField['sql'] . '(' . $metaField['field']->name . ') as ' . $metaField['field']->name . ', ';
+                    } else {
+                        $returnValue .= $metaField['field']->name . ', ';
+                    }
                 }
+                $returnValue = substr($returnValue, 0, strlen($returnValue) - 2);
             }
-            $returnValue = substr($returnValue, 0, strlen($returnValue) - 2);
         }
         return($returnValue);
     }
@@ -374,6 +378,10 @@ abstract class sqlQueryEngine extends queryEngine {
             foreach($this->dynamicFields as $fieldName=>$field){
                 $returnValue .= ','.$field.' AS '.$fieldName;
             }
+        }
+
+        if ($this->removeDefaultFields){
+            $returnValue = substr($returnValue, 1);
         }
 
         return($returnValue);

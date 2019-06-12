@@ -88,6 +88,9 @@ abstract class queryEngine{
      */
     public $key;
 
+    /** @var bool */
+    protected $removeDefaultFields = false;
+
     /**
      * Initialises the query engine, identifying the metaTable or the entity that will define the table that will
      * be managed through it
@@ -182,6 +185,10 @@ abstract class queryEngine{
         return(true);
     }
 
+    public function removeDefaultFields(){
+        $this->removeDefaultFields = true;
+    }
+
     /**
      * Sets the query engine to read and return only a limited set of fields from the database, instead of all of them.
      * Using this functionality is discouraged if the object generated from it needs to be updated, as not all the
@@ -224,13 +231,15 @@ abstract class queryEngine{
     public function getFieldsVariables(){
         $returnValue = [];
 
-        if (isset($this->selectedFields) && sizeof($this->selectedFields) > 0){
-            foreach($this->selectedFields as $field){
-                $returnValue[] = $field['field']->name;
-            }
-        } else {
-            foreach($this->meta->fields as $field){
-                $returnValue[] = $field->name;
+        if (!$this->removeDefaultFields) {
+            if (isset($this->selectedFields) && sizeof($this->selectedFields) > 0) {
+                foreach ($this->selectedFields as $field) {
+                    $returnValue[] = $field['field']->name;
+                }
+            } else {
+                foreach ($this->meta->fields as $field) {
+                    $returnValue[] = $field->name;
+                }
             }
         }
 
